@@ -3,6 +3,13 @@ package com.priyanshu.demo13;
 import org.springframework.stereotype.Component;
 
 @Component
+
+
+
+
+
+
+
 public class Student {
     private String name;
     private int age;
