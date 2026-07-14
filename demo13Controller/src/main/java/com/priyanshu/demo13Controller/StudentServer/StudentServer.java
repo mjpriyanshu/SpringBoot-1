@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+// @RestController
 public class StudentServer {
 
     //1. Store Student Data in Student Class
@@ -23,11 +23,12 @@ public class StudentServer {
     and sending data through Postman in JSON format. The Student object is then converted 
     to a string using the toString() method and returned as the response.
     */
-    @PostMapping("/create")
-    public String storeStudent(@RequestBody Student student){
-        return student.toString();
-    }
+    // @PostMapping("/create")
+    // public String storeStudent(@RequestBody Student student){
+    //     return student.toString();
+    // }
 
+    /*----------------------------------------------------------------------------------------- */
     //2. Read Student data with ID
     // @GetMapping("/read")
 
