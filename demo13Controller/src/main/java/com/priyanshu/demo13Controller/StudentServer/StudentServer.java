@@ -2,23 +2,31 @@ package com.priyanshu.demo13Controller.StudentServer;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class StudentServer {
 
     //1. Store Student Data in Student Class
+    // @PostMapping("/create")
+    // public String storeStudent(){
+    //     return """
+    //             id : 1,
+    //             name : Priyanshu,
+    //             Department: CSE,
+    //             age : 21
+    //             """;
+    // }
+
     @PostMapping("/create")
-    public String storeStudent(){
-        return """
-                id : 1,
-                name : Priyanshu,
-                Department: CSE,
-                age : 21
-                """;
+    public String storeStudent(@RequestBody Student student){
+        return student.toString();
     }
 
     //2. Read Student data with ID
+    // @GetMapping("/read")
+
 
     //3. update the Student information
 
