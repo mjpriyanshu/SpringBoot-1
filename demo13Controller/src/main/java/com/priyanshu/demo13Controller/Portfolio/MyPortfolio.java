@@ -39,6 +39,18 @@ public class MyPortfolio {
     }
 
 
+    @GetMapping("/education")
+    public String Education() {
+        return """
+                <div>
+                <H1 style="color: orange;"> Education </H1>
+                <p style="color: gray;"> I am a Final Year Btech Student in Lovely Professional University Phagwara Punjab </p>
+                <p style="color: gray;"> I have completed matriculation from KV Bihta and Intermediate from BPS Bihta </p>
+                </div>
+                """;
+    }
+
+
 
 
 }   
