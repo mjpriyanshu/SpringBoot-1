@@ -51,6 +51,19 @@ public class MyPortfolio {
     }
 
 
+    @GetMapping("/projects")
+    public String Projects() {
+        return """
+                <div>
+                <H1 style="color: orange;"> Projects </H1>
+                <ul>
+                    <li>Project 1: Demo13Controller Springboot</li>
+                    <li>Project 2: Demo13 Springboot</li>
+                </ul>
+                </div>
+                """;
+    }
+
 
 
 }   
