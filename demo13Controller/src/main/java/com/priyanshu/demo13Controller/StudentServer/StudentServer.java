@@ -19,6 +19,10 @@ public class StudentServer {
     //             """;
     // }
 
+    /*We are using @RequestBody annotation to map the request body to a Student object 
+    and sending data through Postman in JSON format. The Student object is then converted 
+    to a string using the toString() method and returned as the response.
+    */
     @PostMapping("/create")
     public String storeStudent(@RequestBody Student student){
         return student.toString();

@@ -1,6 +1,5 @@
 package com.priyanshu.demo13Controller.StudentServer;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Student {
     private int id;
