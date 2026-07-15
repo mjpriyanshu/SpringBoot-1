@@ -23,8 +23,17 @@ It converts JSON <-> Java Objects
 
 
 ### Detail:
- - StudentServer X   -> StudentController 
+ - StudentServer X(Not used)   -> StudentController 
+ - StudentRepository -> it should be interface and its method should be implemented by other class.
+ - H2 Database, saves the data into RAM. You can also change it to files from mem(memory ram).
+   changes to be done:
+   ```bash
+        # In-Memory Configuration (Data is lost on restart)
+        spring.datasource.url=jdbc:h2:mem:testdb
 
+        # File-Based Configuration (Data persists in your user current working directory as test.mv.db)
+        spring.datasource.url=jdbc:h2:file:./test
+   ```
 
 ## Related Images
 
