@@ -1,6 +1,9 @@
-package com.priyanshu.demo13Controller.StudentServer;
+package com.priyanshu.demo13Controller.StudentServer.Repository;
 
 import org.springframework.stereotype.Repository;
+
+import com.priyanshu.demo13Controller.StudentServer.Entity.Student;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository

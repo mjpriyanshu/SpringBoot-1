@@ -41,4 +41,6 @@ It converts JSON <-> Java Objects
     <p>Flow of springboot</p>
     <img src ="Images/Flow.png">
     <img src ="Images/Flow2.png" width=250px>
+    <p>Spring auto update DDL config details</p>
+    <img src ="Images/Flow3.png"> 
 </div>
