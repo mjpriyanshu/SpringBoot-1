@@ -2,6 +2,7 @@ package com.priyanshu.demo13Controller.StudentServer.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,5 +62,15 @@ public class StudentController {
 
         studentService.studentUpdateSave(prevStudent);
         return ResponseEntity.status(200).body(prevStudent);
+    }
+
+    @DeleteMapping("/deleteStudent/{id}")
+    public ResponseEntity<?> deleteStudent(@PathVariable int id){
+        Student student = studentService.getStudentById(id);
+        if(student == null){
+            return ResponseEntity.status(404).body("Student not found with id: " + id);
+        }
+        studentService.deleteStudentById(id);
+        return ResponseEntity.status(200).body("Student deleted successfully");
     }
 }
