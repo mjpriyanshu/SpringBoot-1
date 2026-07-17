@@ -13,26 +13,37 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public Student studentValidateAndSave(Student student) {
+    private boolean isStudentValid(Student student){
         int id = student.getId();
         String name = student.getName();
         String department = student.getDepartment();
         int age = student.getAge();
 
         if(id < 0 || name == null || age <0 || department == null){
+            return false;
+        }
+        return true;
+    }
+
+    public Student studentSave(Student student) {
+        if(!isStudentValid(student)){
             return null;
         }
-        
-        //if user already exist, then we dont update the same value again with POST
-        if(studentRepository.existsById(id)){
-            System.out.print("User Already Exist with id: " + id + " Can't Update");
+        if(studentRepository.existsById(student.getId())){
             return null;
         }
-        studentRepository.save(student);
-        return student;
+        return studentRepository.save(student);
     }
 
     public Student getStudentById(int id) {
         return studentRepository.findById(id).orElse(null);
+    }
+
+
+    public Student studentUpdateSave(Student student){
+        if(!isStudentValid(student)){
+            return null;
+        }
+        return studentRepository.save(student);
     }
 }
