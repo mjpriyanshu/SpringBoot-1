@@ -1,5 +1,8 @@
 package com.priyanshu.demo13Controller.StudentServer.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.priyanshu.demo13Controller.StudentServer.Entity.Student;
@@ -11,6 +14,10 @@ public class StudentService {
 
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
+    }
+
+    public List<Student> getAllStudents(){
+        return studentRepository.findAll();
     }
 
     private boolean isStudentValid(Student student){
@@ -32,6 +39,8 @@ public class StudentService {
         if(studentRepository.existsById(student.getId())){
             return null;
         }
+        student.setCreatedAt(LocalDateTime.now());
+        student.setUpdatedAt(LocalDateTime.now());
         return studentRepository.save(student);
     }
 
@@ -44,6 +53,7 @@ public class StudentService {
         if(!isStudentValid(student)){
             return null;
         }
+        student.setUpdatedAt(LocalDateTime.now());
         return studentRepository.save(student);
     }
 

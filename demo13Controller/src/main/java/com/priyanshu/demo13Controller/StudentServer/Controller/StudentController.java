@@ -1,5 +1,7 @@
 package com.priyanshu.demo13Controller.StudentServer.Controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,6 +47,16 @@ public class StudentController {
         }
         return ResponseEntity.status(200).body(student);
     }
+
+    @GetMapping("/getAllStudents")
+    public ResponseEntity<?> getAllStudents(){
+        List<Student> students = studentService.getAllStudents();
+        if(students.isEmpty()){
+            return ResponseEntity.status(404).body("No students found");
+        }
+        return ResponseEntity.status(200).body(studentService.getAllStudents());
+    }   
+
 
     @PutMapping("/updateStudent/{id}")
     public ResponseEntity<?> updateStudent(@PathVariable int id, @RequestBody Student student){
