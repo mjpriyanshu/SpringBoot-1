@@ -39,8 +39,9 @@ public class StudentService {
         if(studentRepository.existsById(student.getId())){
             return null;
         }
-        student.setCreatedAt(LocalDateTime.now());
-        student.setUpdatedAt(LocalDateTime.now());
+        /*We are using the annotation @CreationTimestamp */
+        // student.setCreatedAt(LocalDateTime.now());
+        // student.setUpdatedAt(LocalDateTime.now());
         return studentRepository.save(student);
     }
 
@@ -53,7 +54,8 @@ public class StudentService {
         if(!isStudentValid(student)){
             return null;
         }
-        student.setUpdatedAt(LocalDateTime.now());
+        /*We are using the annotation @UpdateTimestamp */
+        // student.setUpdatedAt(LocalDateTime.now());
         return studentRepository.save(student);
     }
 

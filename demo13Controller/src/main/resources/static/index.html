@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Registry — Records Office</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          paper:      '#F1EFE6',
+          paperdim:   '#E7E3D5',
+          cardbg:     '#FBFAF5',
+          ink:        '#1B2029',
+          inksoft:    '#565C6B',
+          navy:       '#17223F',
+          reg:        '#30579E', // "registry indigo" — kept off tailwind's built-in indigo scale
+          regsoft:    '#5678B5',
+          regtint:    '#E8EDF6',
+          brass:      '#A9822F',
+          brasssoft:  '#D9B872',
+          line:       '#CBC5AE',
+          stred:      '#9C3B3B',
+          stgreen:    '#3B6B4A',
+        },
+        fontFamily: {
+          display: ['Fraunces', 'serif'],
+          data:    ['"IBM Plex Mono"', 'monospace'],
+          sans:    ['Inter', 'sans-serif'],
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  /* Things Tailwind utilities can't express cleanly: texture, pseudo-elements, keyframes */
+  body{
+    background-image: radial-gradient(circle at 1px 1px, rgba(27,32,41,0.035) 1px, transparent 0);
+    background-size: 3px 3px;
+  }
+  .index-card{ clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%); }
+  .index-card::before{
+    content:"";
+    position:absolute; top:14px; left:14px;
+    width:9px; height:9px; border-radius:50%;
+    background: #F1EFE6;
+    border: 1px solid #CBC5AE;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
+  }
+  @keyframes stampIn{ from{ opacity:0; transform: rotate(-2deg) scale(.9);} to{ opacity:1; transform: rotate(-2deg) scale(1);} }
+  @keyframes stampOut{ from{ opacity:1; transform: rotate(-2deg) scale(1);} to{ opacity:0; transform: rotate(-2deg) scale(.95) translateY(6px);} }
+  .stamp{ animation: stampIn .25s ease-out forwards, stampOut .3s ease-in forwards 2.6s; }
+</style>
+</head>
+
+<body class="min-h-screen bg-paper text-ink font-sans">
+
+<!-- HEADER -->
+<header class="relative overflow-hidden bg-navy text-[#EFE9D8] px-[5vw] pt-7 pb-[22px]">
+  <div class="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.035)_0_1px,transparent_1px_64px)]"></div>
+  <div class="relative max-w-[1180px] mx-auto flex items-end justify-between gap-6 flex-wrap">
+    <div class="flex items-center gap-3.5">
+      <div class="w-[46px] h-[46px] rounded-full border-2 border-brasssoft flex items-center justify-center font-display font-bold text-[17px] text-brasssoft shrink-0">SR</div>
+      <div>
+        <div class="font-data text-[11.5px] tracking-[.18em] uppercase text-brasssoft mb-1.5">Office of Records &amp; Enrollment</div>
+        <h1 class="font-display font-bold text-[clamp(28px,4vw,42px)] leading-none tracking-tight m-0">Student Registry</h1>
+      </div>
+    </div>
+    <div class="font-data text-xs text-[#EFE9D8]/65 text-right leading-relaxed">
+      Form&nbsp;<b class="text-[#EFE9D8] font-semibold">SR-04</b> · Rev. 2026<br>
+      Backed by <b class="text-[#EFE9D8] font-semibold">Spring Boot</b>
+    </div>
+  </div>
+</header>
+
+<!-- TAB NAV -->
+<nav class="max-w-[1180px] mx-auto px-[5vw] flex gap-1.5 translate-y-px" id="tab-nav">
+  <button data-panel="panel-roster" class="tab-btn active-tab relative top-px bg-cardbg border border-line border-b-0 rounded-t-lg px-5 pt-2.5 pb-3 text-[13.5px] font-semibold text-navy">
+    <span class="font-data font-medium text-brass mr-1.5 text-xs">01</span>Roster
+  </button>
+  <button data-panel="panel-new" class="tab-btn relative top-px bg-paperdim hover:bg-[#DDD9C9] border border-line border-b-0 rounded-t-lg px-5 pt-2.5 pb-3 text-[13.5px] font-semibold text-inksoft transition-colors">
+    <span class="font-data font-medium text-brass mr-1.5 text-xs">02</span>New Entry
+  </button>
+  <button data-panel="panel-find" class="tab-btn relative top-px bg-paperdim hover:bg-[#DDD9C9] border border-line border-b-0 rounded-t-lg px-5 pt-2.5 pb-3 text-[13.5px] font-semibold text-inksoft transition-colors">
+    <span class="font-data font-medium text-brass mr-1.5 text-xs">03</span>Find Record
+  </button>
+</nav>
+
+<main class="max-w-[1180px] mx-auto px-[5vw] pt-8 pb-20">
+
+  <!-- ROSTER PANEL -->
+  <section class="panel bg-cardbg border border-line rounded-tr-[10px] rounded-b-[10px] p-[32px_clamp(20px,4vw,44px)]" id="panel-roster">
+    <div class="flex justify-between items-baseline flex-wrap gap-2.5 border-b border-dashed border-line pb-4 mb-6">
+      <div>
+        <h2 class="font-display font-semibold text-[22px] text-navy m-0">Filed Records</h2>
+        <p class="text-[13px] text-inksoft mt-1 mb-0">Every student currently on record, most recently filed first.</p>
+      </div>
+      <span id="roster-count" class="font-data text-xs text-reg bg-regtint border border-regsoft px-3 py-1.5 rounded-full whitespace-nowrap">0 on file</span>
+    </div>
+    <div class="grid gap-[22px] [grid-template-columns:repeat(auto-fill,minmax(250px,1fr))]" id="roster-grid"></div>
+  </section>
+
+  <!-- NEW ENTRY PANEL -->
+  <section class="panel hidden bg-cardbg border border-line rounded-tr-[10px] rounded-b-[10px] p-[32px_clamp(20px,4vw,44px)]" id="panel-new">
+    <div class="border-b border-dashed border-line pb-4 mb-6">
+      <h2 class="font-display font-semibold text-[22px] text-navy m-0">New Intake Slip</h2>
+      <p class="text-[13px] text-inksoft mt-1 mb-0">Record numbers are assigned by hand — pick one that isn't already filed.</p>
+    </div>
+    <form id="create-form" class="grid grid-cols-2 sm:grid-cols-4 gap-x-5 gap-y-[18px]">
+      <div class="flex flex-col gap-1.5">
+        <label for="c-id" class="font-data text-[10.5px] tracking-[.13em] uppercase text-inksoft">Record No.</label>
+        <input type="number" id="c-id" placeholder="e.g. 1024" required min="0"
+          class="border-0 border-b-[1.5px] border-line bg-transparent py-2.5 px-0.5 text-[15px] text-ink focus:outline-none focus:border-reg placeholder:text-[#B9B3A0]">
+        <small class="text-[11px] text-[#9A9585]">Must be unique</small>
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label for="c-name" class="font-data text-[10.5px] tracking-[.13em] uppercase text-inksoft">Full Name</label>
+        <input type="text" id="c-name" placeholder="Jordan Ellery" required
+          class="border-0 border-b-[1.5px] border-line bg-transparent py-2.5 px-0.5 text-[15px] text-ink focus:outline-none focus:border-reg placeholder:text-[#B9B3A0]">
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label for="c-dept" class="font-data text-[10.5px] tracking-[.13em] uppercase text-inksoft">Department</label>
+        <input type="text" id="c-dept" placeholder="Computer Science" required
+          class="border-0 border-b-[1.5px] border-line bg-transparent py-2.5 px-0.5 text-[15px] text-ink focus:outline-none focus:border-reg placeholder:text-[#B9B3A0]">
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label for="c-age" class="font-data text-[10.5px] tracking-[.13em] uppercase text-inksoft">Age</label>
+        <input type="number" id="c-age" placeholder="20" required min="0"
+          class="border-0 border-b-[1.5px] border-line bg-transparent py-2.5 px-0.5 text-[15px] text-ink focus:outline-none focus:border-reg placeholder:text-[#B9B3A0]">
+      </div>
+      <div class="col-span-2 sm:col-span-4 flex items-center gap-3.5 mt-1.5">
+        <button type="submit" class="font-semibold text-[13.5px] px-[22px] py-[11px] rounded-md bg-reg text-white hover:bg-navy transition-colors active:translate-y-px">File Record</button>
+        <button type="reset" class="font-semibold text-[13.5px] px-[22px] py-[11px] rounded-md border-[1.5px] border-line text-inksoft hover:border-reg hover:text-reg transition-colors active:translate-y-px">Clear Slip</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- FIND PANEL -->
+  <section class="panel hidden bg-cardbg border border-line rounded-tr-[10px] rounded-b-[10px] p-[32px_clamp(20px,4vw,44px)]" id="panel-find">
+    <div class="border-b border-dashed border-line pb-4 mb-6">
+      <h2 class="font-display font-semibold text-[22px] text-navy m-0">Look Up a Record</h2>
+      <p class="text-[13px] text-inksoft mt-1 mb-0">Search the filing system by record number.</p>
+    </div>
+    <div class="flex gap-3 items-end">
+      <div class="flex flex-col gap-1.5 max-w-[220px]">
+        <label for="lookup-id" class="font-data text-[10.5px] tracking-[.13em] uppercase text-inksoft">Record No.</label>
+        <input type="number" id="lookup-id" placeholder="e.g. 1024" min="0"
+          class="border-0 border-b-[1.5px] border-line bg-transparent py-2.5 px-0.5 text-[15px] text-ink focus:outline-none focus:border-reg placeholder:text-[#B9B3A0]">
+      </div>
+      <button id="lookup-btn" type="button" class="font-semibold text-[13.5px] px-[22px] py-[11px] rounded-md bg-reg text-white hover:bg-navy transition-colors active:translate-y-px">Search</button>
+    </div>
+    <div id="lookup-result" class="mt-7"></div>
+  </section>
+
+</main>
+
+<footer class="text-center px-5 pt-2 pb-10 font-data text-[11px] text-[#9A9585]">
+  Student Registry — a records interface for the demo13Controller Spring Boot service
+</footer>
+
+<div id="stamp-toast" class="fixed bottom-7 right-7 z-50 flex flex-col gap-2.5 pointer-events-none"></div>
+
+<script>
+  // Served as a Spring Boot static resource, so relative paths hit the same origin.
+  const API = '';
+
+  // ---------- TABS ----------
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = {
+    'panel-roster': document.getElementById('panel-roster'),
+    'panel-new': document.getElementById('panel-new'),
+    'panel-find': document.getElementById('panel-find'),
+  };
+  function setActiveTab(btn){
+    tabBtns.forEach(b => {
+      b.classList.remove('active-tab', 'bg-cardbg', 'text-navy');
+      b.classList.add('bg-paperdim', 'text-inksoft');
+    });
+    btn.classList.add('active-tab', 'bg-cardbg', 'text-navy');
+    btn.classList.remove('bg-paperdim', 'text-inksoft');
+  }
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setActiveTab(btn);
+      Object.entries(panels).forEach(([id, el]) => el.classList.toggle('hidden', id !== btn.dataset.panel));
+      if (btn.dataset.panel === 'panel-roster') loadRoster();
+    });
+  });
+
+  // ---------- STAMP TOAST ----------
+  function stamp(message, ok = true) {
+    const el = document.createElement('div');
+    el.className = `stamp font-display font-bold italic text-[15px] px-5 py-[11px] rounded-md border-[2.5px] bg-cardbg/95 shadow-[2px_2px_0_rgba(0,0,0,0.06)] ${ok ? 'text-stgreen border-stgreen' : 'text-stred border-stred'}`;
+    el.textContent = (ok ? '✓ ' : '✕ ') + message;
+    document.getElementById('stamp-toast').appendChild(el);
+    setTimeout(() => el.remove(), 3000);
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleDateString(undefined, { year:'numeric', month:'short', day:'2-digit' });
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, s => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[s]));
+  }
+
+  // ---------- ROSTER (read) ----------
+  async function loadRoster() {
+    const grid = document.getElementById('roster-grid');
+    grid.innerHTML = '';
+    try {
+      const res = await fetch(`${API}/getAllStudents`);
+      if (res.status === 404) {
+        grid.innerHTML = emptyState('Nothing Filed Yet', 'Add your first student under "New Entry".');
+        document.getElementById('roster-count').textContent = '0 on file';
+        return;
+      }
+      if (!res.ok) throw new Error('Server error ' + res.status);
+      const students = await res.json();
+      document.getElementById('roster-count').textContent = `${students.length} on file`;
+      students.forEach(s => grid.appendChild(renderCard(s)));
+    } catch (err) {
+      grid.innerHTML = emptyState('Filing Cabinet Unreachable', `${escapeHtml(err.message)} — is the Spring Boot app running?`);
+    }
+  }
+
+  function emptyState(title, body){
+    return `<div class="col-span-full text-center py-14 px-5 text-inksoft">
+      <div class="font-display italic text-[22px] text-line border-2 border-line rounded-lg inline-block px-6 py-2.5 -rotate-3 mb-3.5">${title}</div>
+      <p class="text-[13.5px] m-0">${body}</p>
+    </div>`;
+  }
+
+  function renderCard(s) {
+    const card = document.createElement('div');
+    card.className = 'index-card relative bg-cardbg border border-line rounded-sm shadow-[3px_3px_0_rgba(23,34,63,0.05)] hover:shadow-[4px_5px_0_rgba(23,34,63,0.09)] hover:-translate-y-px transition-all';
+    card.dataset.id = s.id;
+    card.innerHTML = `
+      <div class="absolute top-0 right-0 w-4 h-4 bg-paperdim border-l border-b border-line"></div>
+      <div class="ic-body pt-[18px] pr-[18px] pb-3.5 pl-[34px]">
+        <div class="font-data text-[11px] text-brass tracking-[.08em] mb-2">NO. ${String(s.id).padStart(6, '0')}</div>
+        <p class="font-display font-semibold text-[19px] text-navy m-0 mb-1 leading-tight">${escapeHtml(s.name)}</p>
+        <p class="text-[13px] text-inksoft m-0 mb-3">${escapeHtml(s.department)}</p>
+        <div class="flex gap-4 font-data text-[11px] text-inksoft border-t border-dashed border-line pt-2.5">
+          <div><b class="block text-ink text-[13px] font-medium">${s.age}</b><span class="uppercase tracking-[.08em] text-[9.5px]">Age</span></div>
+        </div>
+      </div>
+      <div class="px-[18px] pb-3 pl-[34px] -mt-1.5 font-data text-[10px] text-[#9A9585] flex gap-3.5">
+        <span>Filed ${fmtDate(s.createdAt)}</span>
+        <span>Updated ${fmtDate(s.updatedAt)}</span>
+      </div>
+      <div class="ic-stub border-t border-dashed border-line py-2.5 pr-[18px] pl-[34px] flex gap-2 justify-end bg-paperdim">
+        <button data-action="edit" class="font-semibold text-xs px-3.5 py-1.5 rounded border border-line text-inksoft hover:border-reg hover:text-reg transition-colors">Edit</button>
+        <button data-action="delete" class="font-semibold text-xs px-3.5 py-1.5 rounded border border-stred text-stred hover:bg-stred hover:text-white transition-colors">Delete</button>
+      </div>
+    `;
+    card.querySelector('[data-action="edit"]').addEventListener('click', () => enterEdit(card, s));
+    card.querySelector('[data-action="delete"]').addEventListener('click', () => removeStudent(s.id, card));
+    return card;
+  }
+
+  // ---------- UPDATE ----------
+  function enterEdit(card, s) {
+    card.querySelector('.ic-body').innerHTML = `
+      <div class="font-data text-[11px] text-brass tracking-[.08em] mb-2">NO. ${String(s.id).padStart(6, '0')} (fixed)</div>
+      <input data-field="name" type="text" value="${escapeHtml(s.name)}"
+        class="w-full border-0 border-b-[1.5px] border-reg bg-transparent font-display text-[16px] text-navy py-1 mb-2 focus:outline-none">
+      <input data-field="department" type="text" value="${escapeHtml(s.department)}"
+        class="w-full border-0 border-b-[1.5px] border-reg bg-transparent font-display text-[16px] text-navy py-1 mb-2 focus:outline-none">
+      <input data-field="age" type="number" min="0" value="${s.age}"
+        class="w-full border-0 border-b-[1.5px] border-reg bg-transparent font-display text-[16px] text-navy py-1 focus:outline-none">
+    `;
+    card.querySelector('.ic-stub').innerHTML = `
+      <button data-action="cancel" class="font-semibold text-xs px-3.5 py-1.5 rounded border border-line text-inksoft hover:border-reg hover:text-reg transition-colors">Cancel</button>
+      <button data-action="save" class="font-semibold text-xs px-3.5 py-1.5 rounded bg-reg text-white hover:bg-navy transition-colors">Save</button>
+    `;
+    card.querySelector('[data-action="cancel"]').addEventListener('click', loadRoster);
+    card.querySelector('[data-action="save"]').addEventListener('click', () => saveEdit(card, s.id));
+  }
+
+  async function saveEdit(card, id) {
+    const name = card.querySelector('[data-field="name"]').value.trim();
+    const department = card.querySelector('[data-field="department"]').value.trim();
+    const age = parseInt(card.querySelector('[data-field="age"]').value, 10);
+    try {
+      const res = await fetch(`${API}/updateStudent/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, name, department, age })
+      });
+      if (!res.ok) {
+        const msg = await res.text();
+        stamp(msg || 'Update rejected', false);
+        return;
+      }
+      stamp('Record updated');
+      loadRoster();
+    } catch (err) {
+      stamp('Could not reach the server', false);
+    }
+  }
+
+  // ---------- DELETE ----------
+  async function removeStudent(id, card) {
+    if (!confirm(`Remove record No. ${id} permanently?`)) return;
+    try {
+      const res = await fetch(`${API}/deleteStudent/${id}`, { method: 'DELETE' });
+      if (!res.ok) {
+        const msg = await res.text();
+        stamp(msg || 'Delete failed', false);
+        return;
+      }
+      stamp('Record removed');
+      card.remove();
+      loadRoster();
+    } catch (err) {
+      stamp('Could not reach the server', false);
+    }
+  }
+
+  // ---------- CREATE ----------
+  document.getElementById('create-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+      id: parseInt(document.getElementById('c-id').value, 10),
+      name: document.getElementById('c-name').value.trim(),
+      department: document.getElementById('c-dept').value.trim(),
+      age: parseInt(document.getElementById('c-age').value, 10)
+    };
+    try {
+      const res = await fetch(`${API}/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.status === 201) {
+        stamp('Record filed');
+        e.target.reset();
+      } else {
+        const msg = await res.text();
+        stamp(msg || 'Could not file record (duplicate No.?)', false);
+      }
+    } catch (err) {
+      stamp('Could not reach the server', false);
+    }
+  });
+
+  // ---------- FIND (read by id) ----------
+  document.getElementById('lookup-btn').addEventListener('click', async () => {
+    const id = document.getElementById('lookup-id').value;
+    const box = document.getElementById('lookup-result');
+    if (id === '') { stamp('Enter a record number first', false); return; }
+    box.innerHTML = '';
+    try {
+      const res = await fetch(`${API}/getStudent/${id}`);
+      if (res.status === 404) {
+        box.innerHTML = emptyState('No Such Record', `Nothing filed under No. ${escapeHtml(id)}.`);
+        return;
+      }
+      if (!res.ok) throw new Error('Server error ' + res.status);
+      const s = await res.json();
+      const wrap = document.createElement('div');
+      wrap.className = 'max-w-[320px]';
+      wrap.appendChild(renderCard(s));
+      box.appendChild(wrap);
+    } catch (err) {
+      box.innerHTML = `<div class="text-center py-14 px-5 text-inksoft"><p>${escapeHtml(err.message)}</p></div>`;
+    }
+  });
+
+  loadRoster();
+</script>
+
+</body>
+</html>

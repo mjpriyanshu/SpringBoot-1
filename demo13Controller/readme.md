@@ -21,6 +21,15 @@ It converts JSON <-> Java Objects
  - It is primarily responsible for converting Java objects into JSON strings (Serialization) and translating incoming JSON request data back into Java objects (Deserialization) 
 
 
+## createdAt and updatedAt
+we will use LocalDateTime for this.
+```
+student.setUpdatedAt(LocalDateTime.now());
+```
+
+or we can use annotation such as
+`@CreationTimestamp` and `@UpdateTimestamp` so it will be automatically updated.
+
 
 ### Detail:
  - StudentServer X(Not used)   -> StudentController 
