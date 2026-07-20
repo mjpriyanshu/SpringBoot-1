@@ -5,52 +5,54 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.priyanshu.demo13Controller.StudentServer.Dto.CreateStudentRequestDTO;
-import com.priyanshu.demo13Controller.StudentServer.Dto.CreateStudentResponseDTO;
+import com.priyanshu.demo13Controller.StudentServer.Dto.StudentResponseDTO;
 import com.priyanshu.demo13Controller.StudentServer.Dto.UpdateStudentRequestDTO;
 import com.priyanshu.demo13Controller.StudentServer.Entity.Student;
 import com.priyanshu.demo13Controller.StudentServer.Repository.StudentRepository;
 
 @Service
 public class StudentService {
-    private StudentRepository studentRepository;    // Create ref for StudentRepository class to save into DB
+    private StudentRepository studentRepository; // Create ref for StudentRepository class to save into DB
 
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
-    public List<Student> getAllStudents(){
+    public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
 
     // private boolean isStudentValid(Student student){
-    //     int id = student.getId();
-    //     String name = student.getName();
-    //     String department = student.getDepartment();
-    //     int age = student.getAge();
+    // int id = student.getId();
+    // String name = student.getName();
+    // String department = student.getDepartment();
+    // int age = student.getAge();
 
-    //     if(id < 0 || name == null || age <0 || department == null){
-    //         return false;
-    //     }
-    //     return true;
+    // if(id < 0 || name == null || age <0 || department == null){
+    // return false;
+    // }
+    // return true;
     // }
 
-    /* studentSave method.
-    Student Class conversion to CreateStudentRequestDTO */
+    /*
+     * studentSave method.
+     * Student Class conversion to CreateStudentRequestDTO
+     */
     // public Student studentSave(Student student) {
-    //     if(!isStudentValid(student)){
-    //         return null;
-    //     }
-    //     if(studentRepository.existsById(student.getId())){
-    //         return null;
-    //     }
-    //     /*We are using the annotation @CreationTimestamp */
-    //     // student.setCreatedAt(LocalDateTime.now());
-    //     // student.setUpdatedAt(LocalDateTime.now());
-    //     return studentRepository.save(student);
+    // if(!isStudentValid(student)){
+    // return null;
+    // }
+    // if(studentRepository.existsById(student.getId())){
+    // return null;
+    // }
+    // /*We are using the annotation @CreationTimestamp */
+    // // student.setCreatedAt(LocalDateTime.now());
+    // // student.setUpdatedAt(LocalDateTime.now());
+    // return studentRepository.save(student);
     // }
 
-    /*CreateStudentRequestDTO code */
-    public CreateStudentResponseDTO studentSave(CreateStudentRequestDTO studentRequestDTO){
+    /* CreateStudentRequestDTO code */
+    public StudentResponseDTO studentSave(CreateStudentRequestDTO studentRequestDTO) {
         Student student = mapToStudent(studentRequestDTO);
 
         Student savedStudent = studentRepository.save(student);
@@ -65,8 +67,8 @@ public class StudentService {
         return student;
     }
 
-    private CreateStudentResponseDTO mapToResponseDTO(Student student){
-        CreateStudentResponseDTO responseDTO = new CreateStudentResponseDTO();
+    private StudentResponseDTO mapToResponseDTO(Student student) {
+        StudentResponseDTO responseDTO = new StudentResponseDTO();
         responseDTO.setId(student.getId());
         responseDTO.setName(student.getName());
         responseDTO.setAge(student.getAge());
@@ -74,26 +76,35 @@ public class StudentService {
         return responseDTO;
     }
 
-
-    /* */
+    /* Conversion from normal to DTO response for getStudentById */
     public Student getStudentById(int id) {
-        return studentRepository.findById(id).orElse(null);
+    return studentRepository.findById(id).orElse(null);
     }
 
+    public StudentResponseDTO getStudentDTOById(int id) {
 
-    /*Updatesave conversion below using DTO */
+        Student student = studentRepository.findById(id).orElse(null);
+
+        if (student == null) {
+            return null;
+        }
+
+        return mapToResponseDTO(student);
+    }
+
+    /* Updatesave conversion below using DTO */
     // public Student studentUpdateSave(Student student){
-    //     // if(!isStudentValid(student)){
-    //     //     return null;
-    //     // }
-    //     /*We are using the annotation @UpdateTimestamp */
-    //     // student.setUpdatedAt(LocalDateTime.now());
-    //     return studentRepository.save(student);
+    // // if(!isStudentValid(student)){
+    // // return null;
+    // // }
+    // /*We are using the annotation @UpdateTimestamp */
+    // // student.setUpdatedAt(LocalDateTime.now());
+    // return studentRepository.save(student);
     // }
 
-    public CreateStudentResponseDTO updateStudent(int id, UpdateStudentRequestDTO updateStudentRequestDTO){
+    public StudentResponseDTO updateStudent(int id, UpdateStudentRequestDTO updateStudentRequestDTO) {
         Student student = studentRepository.findById(id).orElse(null);
-        if(student == null){
+        if (student == null) {
             return null;
         }
         student.setName(updateStudentRequestDTO.getName());

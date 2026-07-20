@@ -3,6 +3,10 @@ package com.priyanshu.demo13Controller.StudentServer.Entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 
@@ -14,8 +18,14 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @NotBlank(message = "Name cannot be empty")
+    @Size(min = 3, max = 30, message = "Name must be between 3 and 30 characters")
     private String name;
     private String department;
+
+    @Min(value = 18, message = "Age must be at least 18")
+    @Max(value = 60, message = "Age cannot exceed 60")
     private int age;
 
     @CreationTimestamp
