@@ -21,7 +21,8 @@ import com.priyanshu.demo13Controller.StudentServer.Service.StudentService;
 @RestController
 public class StudentController {
 
-    StudentService studentService;
+    /*Make it private final so references cant be changed. */
+    private final StudentService studentService;
 
     @Autowired
     public StudentController(StudentService studentService) {
@@ -51,7 +52,7 @@ public class StudentController {
     public ResponseEntity<?> storeStudent(@RequestBody CreateStudentRequestDTO studentRequestDTO) {
 
         // return student.toString();
-        StudentResponseDTO result = studentService.studentSave(studentRequestDTO); // Using service to validate
+        StudentResponseDTO result = studentService.createStudent(studentRequestDTO); // Using service to validate
                                                                                          // and save the student
         if (result == null) {
             return ResponseEntity.status(400).body("Student information is invalid");
@@ -84,11 +85,11 @@ public class StudentController {
 
     @GetMapping("/getAllStudents")
     public ResponseEntity<?> getAllStudents() {
-        List<Student> students = studentService.getAllStudents();
+        List<StudentResponseDTO> students = studentService.getAllStudents();
         if (students.isEmpty()) {
             return ResponseEntity.status(404).body("No students found");
         }
-        return ResponseEntity.status(200).body(studentService.getAllStudents());
+        return ResponseEntity.status(200).body(students);
     }
 
     /*
