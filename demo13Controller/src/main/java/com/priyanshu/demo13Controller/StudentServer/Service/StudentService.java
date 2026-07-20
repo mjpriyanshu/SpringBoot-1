@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.priyanshu.demo13Controller.StudentServer.Dto.CreateStudentRequestDTO;
 import com.priyanshu.demo13Controller.StudentServer.Dto.CreateStudentResponseDTO;
+import com.priyanshu.demo13Controller.StudentServer.Dto.UpdateStudentRequestDTO;
 import com.priyanshu.demo13Controller.StudentServer.Entity.Student;
 import com.priyanshu.demo13Controller.StudentServer.Repository.StudentRepository;
 
@@ -51,7 +52,7 @@ public class StudentService {
     /*CreateStudentRequestDTO code */
     public CreateStudentResponseDTO studentSave(CreateStudentRequestDTO studentRequestDTO){
         Student student = mapToStudent(studentRequestDTO);
-        
+
         Student savedStudent = studentRepository.save(student);
         return mapToResponseDTO(savedStudent);
     }
@@ -80,13 +81,26 @@ public class StudentService {
     }
 
 
-    public Student studentUpdateSave(Student student){
-        // if(!isStudentValid(student)){
-        //     return null;
-        // }
-        /*We are using the annotation @UpdateTimestamp */
-        // student.setUpdatedAt(LocalDateTime.now());
-        return studentRepository.save(student);
+    /*Updatesave conversion below using DTO */
+    // public Student studentUpdateSave(Student student){
+    //     // if(!isStudentValid(student)){
+    //     //     return null;
+    //     // }
+    //     /*We are using the annotation @UpdateTimestamp */
+    //     // student.setUpdatedAt(LocalDateTime.now());
+    //     return studentRepository.save(student);
+    // }
+
+    public CreateStudentResponseDTO updateStudent(int id, UpdateStudentRequestDTO updateStudentRequestDTO){
+        Student student = studentRepository.findById(id).orElse(null);
+        if(student == null){
+            return null;
+        }
+        student.setName(updateStudentRequestDTO.getName());
+        student.setAge(updateStudentRequestDTO.getAge());
+
+        Student updatedStudent = studentRepository.save(student);
+        return mapToResponseDTO(updatedStudent);
     }
 
     public void deleteStudentById(int id) {

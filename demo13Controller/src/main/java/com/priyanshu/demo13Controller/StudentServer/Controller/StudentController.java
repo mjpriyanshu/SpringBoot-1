@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.priyanshu.demo13Controller.StudentServer.Dto.CreateStudentRequestDTO;
 import com.priyanshu.demo13Controller.StudentServer.Dto.CreateStudentResponseDTO;
+import com.priyanshu.demo13Controller.StudentServer.Dto.UpdateStudentRequestDTO;
 import com.priyanshu.demo13Controller.StudentServer.Entity.Student;
 import com.priyanshu.demo13Controller.StudentServer.Service.StudentService;
 
@@ -73,24 +74,40 @@ public class StudentController {
         return ResponseEntity.status(200).body(studentService.getAllStudents());
     }   
 
+    /* Update student 
+        conversion to DTO below this
+    */
+    // @PutMapping("/updateStudent/{id}")
+    // public ResponseEntity<?> updateStudent(@PathVariable int id, @RequestBody Student student){
+    //     //1. find student 
+    //     Student prevStudent = studentService.getStudentById(id);
+
+    //     if(prevStudent == null){
+    //         return ResponseEntity.status(404).body("Student not found with id: " + id);
+    //     }
+
+    //     // update
+    //     prevStudent.setName(student.getName());
+    //     prevStudent.setDepartment(student.getDepartment());
+    //     prevStudent.setAge(student.getAge());
+
+    //     studentService.studentUpdateSave(prevStudent);
+    //     return ResponseEntity.status(200).body(prevStudent);
+    // }
 
     @PutMapping("/updateStudent/{id}")
-    public ResponseEntity<?> updateStudent(@PathVariable int id, @RequestBody Student student){
-        //1. find student 
-        Student prevStudent = studentService.getStudentById(id);
+    public ResponseEntity<?> updateStudent(@PathVariable int id, @RequestBody UpdateStudentRequestDTO studentRequestDTO){
 
-        if(prevStudent == null){
+        CreateStudentResponseDTO response = studentService.updateStudent(id, studentRequestDTO);
+
+        if(response == null){
             return ResponseEntity.status(404).body("Student not found with id: " + id);
         }
 
-        // update
-        prevStudent.setName(student.getName());
-        prevStudent.setDepartment(student.getDepartment());
-        prevStudent.setAge(student.getAge());
-
-        studentService.studentUpdateSave(prevStudent);
-        return ResponseEntity.status(200).body(prevStudent);
+        return ResponseEntity.status(200).body(response);
     }
+
+
 
     @DeleteMapping("/deleteStudent/{id}")
     public ResponseEntity<?> deleteStudent(@PathVariable int id){
