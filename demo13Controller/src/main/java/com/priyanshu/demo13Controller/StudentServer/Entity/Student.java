@@ -1,6 +1,8 @@
 package com.priyanshu.demo13Controller.StudentServer.Entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 
@@ -10,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 public class Student {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private String department;

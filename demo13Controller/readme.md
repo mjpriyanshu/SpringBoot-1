@@ -30,6 +30,9 @@ student.setUpdatedAt(LocalDateTime.now());
 or we can use annotation such as
 `@CreationTimestamp` and `@UpdateTimestamp` so it will be automatically updated.
 
+## LOMBOK
+Dependency used for providing annotation for setters and getters, which improves code visibility.
+
 
 ### Detail:
  - StudentServer X(Not used)   -> StudentController 

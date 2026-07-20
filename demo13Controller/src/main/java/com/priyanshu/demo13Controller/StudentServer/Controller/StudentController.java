@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.priyanshu.demo13Controller.StudentServer.Dto.CreateStudentRequestDTO;
+import com.priyanshu.demo13Controller.StudentServer.Dto.CreateStudentResponseDTO;
 import com.priyanshu.demo13Controller.StudentServer.Entity.Student;
 import com.priyanshu.demo13Controller.StudentServer.Service.StudentService;
 
@@ -26,15 +28,29 @@ public class StudentController {
     }
 
 
-     @PostMapping("/create")
-    public ResponseEntity<?> storeStudent(@RequestBody Student student){
-        // return student.toString();
-        Student result = studentService.studentSave(student);  //Using service to validate and save the student
+    /*Rather than directly using student object to pass data, we will use CreateStudentRequestDTO. 
+    Which also makes the code loosely coupled */
+
+    //  @PostMapping("/create")
+    // public ResponseEntity<?> storeStudent(@RequestBody Student student){
+    //     // return student.toString();
+    //     Student result = studentService.studentSave(student);  //Using service to validate and save the student
         
+    //     if(result == null){
+    //         return ResponseEntity.status(400).body("Student information is invalid");
+    //     }
+
+    //     return ResponseEntity.status(201).body(result);
+    // }
+
+     @PostMapping("/create")
+    public ResponseEntity<?> storeStudent(@RequestBody CreateStudentRequestDTO studentRequestDTO){
+        
+        // return student.toString();
+        CreateStudentResponseDTO result = studentService.studentSave(studentRequestDTO);  //Using service to validate and save the student
         if(result == null){
             return ResponseEntity.status(400).body("Student information is invalid");
         }
-
         return ResponseEntity.status(201).body(result);
     }
 
