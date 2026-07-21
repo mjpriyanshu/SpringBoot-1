@@ -34,6 +34,34 @@ or we can use annotation such as
 Dependency used for providing annotation for setters and getters, which improves code visibility.
 
 
+## Exception
+
+`throws` and `throw`:
+
+```
+    private Student findStudentById(int id) throws Exception {
+        Optional<Student> student = studentRepository.findById(id);
+        if(student.isEmpty()){
+            throw new Exception("Student not found"); 
+        }
+        return student.get();
+    }
+```
+- Notice `throws` and `throw` these go together because `Exception` is `Checked`.
+
+``` 
+    private Student findStudentById(int id) {
+        Optional<Student> student = studentRepository.findById(id);
+        if(student.isEmpty()){
+            throw new RuntimeException("Student not found"); 
+        }
+        return student.get();
+    }
+```
+- But here we are only using `throw` because `RuntimeException` is a `unchecked`.
+
+
+
 ### Detail:
  - StudentServer X(Not used)   -> StudentController 
  - StudentRepository -> it should be interface and its method should be implemented by other class.

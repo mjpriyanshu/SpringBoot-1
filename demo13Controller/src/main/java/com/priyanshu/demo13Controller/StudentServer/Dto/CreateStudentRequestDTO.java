@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 public class CreateStudentRequestDTO {
     private String name;
+    private String email;
     private String department;
     private int age;
     

@@ -7,5 +7,6 @@ import lombok.Setter;
 @Setter
 public class UpdateStudentRequestDTO {
     private String name;
+    private String email;
     private int age;
 }

@@ -68,6 +68,7 @@ public class StudentService {
         student.setName(studentRequestDTO.getName());
         student.setAge(studentRequestDTO.getAge());
         student.setDepartment(studentRequestDTO.getDepartment());
+        student.setEmail(studentRequestDTO.getEmail());
         return student;
     }
 
@@ -75,6 +76,7 @@ public class StudentService {
         StudentResponseDTO responseDTO = new StudentResponseDTO();
         responseDTO.setId(student.getId());
         responseDTO.setName(student.getName());
+        responseDTO.setEmail(student.getEmail());
         responseDTO.setAge(student.getAge());
         responseDTO.setDepartment(student.getDepartment());
         return responseDTO;
@@ -137,6 +139,7 @@ public class StudentService {
 
         student.setName(updateStudentRequestDTO.getName());
         student.setAge(updateStudentRequestDTO.getAge());
+        student.setEmail(updateStudentRequestDTO.getEmail());
 
         Student updatedStudent = studentRepository.save(student);
         return mapToResponseDTO(updatedStudent);
