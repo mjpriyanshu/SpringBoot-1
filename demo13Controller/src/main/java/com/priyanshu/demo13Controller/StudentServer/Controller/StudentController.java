@@ -75,10 +75,11 @@ public class StudentController {
 
         StudentResponseDTO response = studentService.getStudentDTOById(id);
 
-        if (response == null) {
-            return ResponseEntity.status(404)
-                    .body("Student not found with id : " + id);
-        }
+        /*After exception handling, this will never get null so we commented it out */
+        // if (response == null) {
+        //     return ResponseEntity.status(404)
+        //             .body("Student not found with id : " + id);
+        // }
 
         return ResponseEntity.ok(response);
     }
@@ -117,23 +118,26 @@ public class StudentController {
 
     @PutMapping("/updateStudent/{id}")
     public ResponseEntity<?> updateStudent(@PathVariable int id,
-            @RequestBody UpdateStudentRequestDTO studentRequestDTO) {
+        @RequestBody UpdateStudentRequestDTO studentRequestDTO) {
 
         StudentResponseDTO response = studentService.updateStudent(id, studentRequestDTO);
 
-        if (response == null) {
-            return ResponseEntity.status(404).body("Student not found with id: " + id);
-        }
+        /*Exception will be handled and we will never get null */
+        // if (response == null) {
+        //     return ResponseEntity.status(404).body("Student not found with id: " + id);
+        // }
 
         return ResponseEntity.status(200).body(response);
     }
 
     @DeleteMapping("/deleteStudent/{id}")
     public ResponseEntity<?> deleteStudent(@PathVariable int id) {
-        Student student = studentService.getStudentById(id);
-        if (student == null) {
-            return ResponseEntity.status(404).body("Student not found with id: " + id);
-        }
+
+        /*No need, exception will be handled */
+        // Student student = studentService.getStudentById(id);
+        // if (student == null) {
+        //     return ResponseEntity.status(404).body("Student not found with id: " + id);
+        // }
         studentService.deleteStudentById(id);
         return ResponseEntity.status(200).body("Student deleted successfully");
     }

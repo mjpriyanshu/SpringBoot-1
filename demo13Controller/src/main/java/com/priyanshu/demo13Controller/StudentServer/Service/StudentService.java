@@ -2,6 +2,7 @@ package com.priyanshu.demo13Controller.StudentServer.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -50,8 +51,15 @@ public class StudentService {
 
     /*Helper Functions */
     private Student findStudentById(int id) {
-        return studentRepository.findById(id).orElse(null);
+        Optional<Student> student = studentRepository.findById(id);
+
+        /*Optional is never null, so we check empty and throw and error if empty */
+        if(student.isEmpty()){
+            throw new RuntimeException("Student not found"); // we will get this exception message when we try to get the student by id and it does not exist. This will be handled by GlobalException class.
+        }
+        return student.get();
     }
+
 
 
     /*Mapper Methods */
@@ -109,11 +117,6 @@ public class StudentService {
     public StudentResponseDTO getStudentDTOById(int id) {
 
         Student student = findStudentById(id); //helper function
-
-        if (student == null) {
-            return null;
-        }
-
         return mapToResponseDTO(student);
     }
 
@@ -131,9 +134,7 @@ public class StudentService {
 
     public StudentResponseDTO updateStudent(int id, UpdateStudentRequestDTO updateStudentRequestDTO) {
         Student student = findStudentById(id); //helper function
-        if (student == null) {
-            return null;
-        }
+
         student.setName(updateStudentRequestDTO.getName());
         student.setAge(updateStudentRequestDTO.getAge());
 
@@ -145,6 +146,7 @@ public class StudentService {
 
 
     public void deleteStudentById(int id) {
+        findStudentById(id); //helper function to check if student exists, then we  can delete it. If not, it will throw an exception and we will not reach the delete line.
         studentRepository.deleteById(id);
     }
 }
