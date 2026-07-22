@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyFirstPage</title>
+</head>
+<body style="background-color:beige; width: 100vw; height: 100vw;">
+    <div >
+        <P> Hello Priyanshu! </P>
+        
+        <strong> This is my first page in React! </strong> <br>
+        <em>This is italic text.</em> <br>
+
+        <img src="https://images.unsplash.com/photo-1614200179396-2bdb77ebf81b?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Red Ferrari" style="width: 60vw; height: 50vh;">
+        
+        <h2>Code</h2>
+        <pre style="background-color: lightgray; padding: 10px; border: 1px solid black; border-radius: 5px; overflow-x: auto;">
+            public static void main(String args[]){
+                System.out.println("Hello Priyanshu!");
+            }
+        </pre>
+
+        <!-- using border on left side to create a quote style box -->
+        <div
+          style="background-color: lightgray; width: 100vw; padding: 20px; border-left: 8px solid black; box-sizing: border-box;">
+          <q style="font-style: italic; display: block; font-size: 1.2rem; margin-bottom: 8px;">
+            Engineering is the closest thing to magic that exists in the world.
+          </q>
+          <cite style="display: block; font-weight: bold; margin-bottom: 12px; color: #333;">
+            — MjPriyanshu
+          </cite>
+          <a href="https://github.com/mjpriyanshu" target="_blank" style="color: #0066cc; text-decoration: none;">
+            Check out my GitHub profile!
+          </a>
+        </div>
+
+
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+          <thead>
+            <tr>
+              <th style="border: 1px solid black; padding: 8px;">Month</th>
+              <th style="border: 1px solid black; padding: 8px;">Spending</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid black; padding: 8px;">January</td>
+              <td style="border: 1px solid black; padding: 8px;">Rs. 1,000</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black; padding: 8px;">February</td>
+              <td style="border: 1px solid black; padding: 8px;">Rs. 1,200</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black; padding: 8px;">March</td>
+              <td style="border: 1px solid black; padding: 8px;">Rs. 900</td>
+            </tr>
+            <tr style="font-weight: bold;">
+              <td style="border: 1px solid black; padding: 8px;">Total</td>
+              <td style="border: 1px solid black; padding: 8px;">Rs. 3,100</td>
+            </tr>
+            
+          </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 20px; padding: 20px; background-color: lightgray; border-radius: 5px;">
+      <form action="">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" placeholder="your name"><br><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="your email"><br><br>
+
+        <label for="phone">Phone:</label>
+        <input type="number" id="phone" name="phone" placeholder="your phone number"><br><br>
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" placeholder="your age"><br><br>
+
+        <input type="date" id="date" name="date"><br><br>
+        <input type="checkbox" id="subscribe" name="subscribe" value="subscribe">
+        <label for="subscribe">Subscribe to newsletter</label>
+        <input type="checkbox" id="subscribe" name="subscribe" value="subscribe">
+        <label for="subscribe">Subscribe to email</label>
+        <br>
+        <input type="radio" id="male" name="gender" value="male">
+        <label for="male">Male</label>
+        <input type="radio" id="female" name="gender" value="female">
+        <label for="female">Female</label>
+        <br>
+        <select name="country" id="country">
+          <option value="india">India</option>
+          <option value="usa">USA</option>
+          <option value="uk">UK</option>
+          <option value="canada">Canada</option>
+        </select>
+
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+        <footer>
+          <a href="https://www.example.com" target="_blank" style="color: #0066cc; text-decoration: none;">
+            <img src="https://cdn.arstechnica.net/wp-content/uploads/2015/09/2000px-Wikipedia-logo-v2-en.jpg" alt="Example Logo" style="width: 30px; height: 30px; vertical-align: middle; margin-right: 5px;">
+            Visit Wikipedia.com
+          </a>
+        </footer>
+
+      </form>
+    </div>
+</body>
+</html>
