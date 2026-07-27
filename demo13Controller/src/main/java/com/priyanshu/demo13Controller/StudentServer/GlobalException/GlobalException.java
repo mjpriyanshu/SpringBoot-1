@@ -13,29 +13,24 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 public class GlobalException {
-    
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleException(RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-    }
 
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleCheckedException(Exception e) {
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(e.getMessage());
-    }
-
+    // 1. Handlers for unchecked exceptions (Runtime exceptions)
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ExceptionResponseDTO> handleRuntimeException(RuntimeException e, HttpServletRequest request) {
         ExceptionResponseDTO response = new ExceptionResponseDTO(
             LocalDateTime.now(),
-            HttpStatus.NOT_FOUND.value(),
-            HttpStatus.NOT_FOUND.getReasonPhrase(),
+            HttpStatus.INTERNAL_SERVER_ERROR.value(), // Changed to 500 to match status below
+            HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
             e.getMessage(),
             request.getRequestURI()
         );
-        return ResponseEntity.status(500).body(response);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    // 2. Fallback handler for all other checked exceptions
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleCheckedException(Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(e.getMessage());
     }
 }
